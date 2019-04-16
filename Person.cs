@@ -1,7 +1,7 @@
 using System;
 namespace _1
 {
-    public class Person
+    public class Person 
     {
         private string _name;
         private string _surname;
@@ -50,6 +50,61 @@ namespace _1
         public virtual string ToShortString()
         {
             return Surname + " " + Name;
+        }
+
+        public override bool Equals(object obj)
+        {
+                if (ReferenceEquals(null, obj))
+                {
+                    return false;
+                }
+                if (ReferenceEquals(this, obj))
+                {
+                    return true;
+                }
+                if(obj.GetType() != GetType()) return false;
+                Person p = (Person) obj;
+                return p.Name == Name  && p.Surname == Surname  &&  p.Birthdate == Birthdate;
+        }
+
+        public static bool operator ==(Person obj1, Person obj2)
+        {
+        if (ReferenceEquals(obj1, obj2))
+        {
+            return true;
+        }
+
+        if (ReferenceEquals(obj1, null) || ReferenceEquals(obj2, null))
+        {
+            return false;
+        }
+
+        return (obj1.Name == obj2.Name
+                && obj1.Surname == obj2.Surname
+                && obj1.Birthdate == obj2.Birthdate);
+        }
+
+        public static bool operator !=(Person obj1, Person obj2)
+        {
+            return !(obj1 == obj2);
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 7;
+            hash = (hash * 5) + (!Object.ReferenceEquals(null, Name) ? Name.GetHashCode() : 0);
+            hash = (hash * 5) + (!Object.ReferenceEquals(null, Surname) ? Surname.GetHashCode() : 0);
+            hash = (hash * 5) + (!Object.ReferenceEquals(null, Birthdate) ? Birthdate.GetHashCode() : 0);
+            return hash;
+        }
+
+        public virtual object DeepCopy()
+        {
+            Person result = new Person();
+            result.Name = String.Copy(Name);
+            result.Surname = String.Copy(Surname);
+            result.Birthdate = Birthdate;
+            return result;
         }
     }
 }
