@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace _1
 {
@@ -69,7 +70,9 @@ namespace _1
             Console.WriteLine("One dimensional array - "+ blocktime1);
             Console.WriteLine("Two dimensional array - "+ blocktime2);
             Console.WriteLine("Pointed dimensional array - "+ blocktime3);*/
-            Console.WriteLine("task 1");
+            
+            
+            /* Console.WriteLine("task 1");
             Team obj1 = new Team("Gusi","Gusak inc.",322);  // 1 task
             Team obj2 = new Team("Gusi","Gusak inc.",322);
             Console.WriteLine(obj1.GetHashCode() + " = " + obj2.GetHashCode()); 
@@ -132,8 +135,38 @@ namespace _1
             foreach (var p in obj3.LastYearPublications())//3 additional
             {
                 Console.WriteLine(p.ToString());
-            }
+            } */
+            ResearchTeamCollection ResTeamCollection = new ResearchTeamCollection();
+            ResTeamCollection.AddResearchTeams(
+                    TestCollections.GetResTeam(3),
+                    TestCollections.GetResTeam(5),
+                    TestCollections.GetResTeam(1),
+                    TestCollections.GetResTeam(4),
+                    TestCollections.GetResTeam(2)
+                );
+            Console.WriteLine(ResTeamCollection);
 
+            ResTeamCollection.SortByRegistration();
+            Console.WriteLine("Sorted by Registration: \n {0}\n", string.Join(" ; ", ResTeamCollection.ResearchTeams.Select(x => x.Registration).ToArray()) );
+        
+            ResTeamCollection.SortByTopic();
+            Console.WriteLine("Sorted by Topic: \n {0}\n", string.Join(" ; ", ResTeamCollection.ResearchTeams.Select(x => x.Topic).ToArray()) );
+
+            ResTeamCollection.SortByPublications();
+            Console.WriteLine("Sorted by Publications amount: \n {0}\n", string.Join(" ; ", ResTeamCollection.ResearchTeams.Select(x => x.Publications.Count).ToArray()) );
+
+            Console.WriteLine("Min registration: {0}\n", ResTeamCollection.GetMinRegistration());
+
+            Console.WriteLine("Research teams with 2 years: \n {0}\n",
+                string.Join(" ; ", ResTeamCollection.GetTwoYearDuration().Select(x => x.Org).ToArray()));
+
+            int value = 3;
+            Console.WriteLine("Teams with {0} participants:\n {1}\n", value,
+                string.Join(" ; ", ResTeamCollection.GetNGroup(value).Select(x => x.Org).ToArray()));
+
+            TestCollections test = new TestCollections(100);
+            Console.WriteLine("Searching time:");
+            test.MeasureTime();
         }
     }
 //appl-dpt@chnu.edu.ua

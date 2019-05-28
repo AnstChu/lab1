@@ -1,7 +1,7 @@
 using System;
 namespace _1
 {
-    public class Team : INameAndCopy
+    public class Team : INameAndCopy, IComparable<Team>
     {
         protected string _org;
         protected int _registration;
@@ -93,6 +93,14 @@ namespace _1
         public override string ToString()
         {
             return "Організація "+Org+", номер реєстрації - "+Registration;
+        }
+
+        public int CompareTo(Team obj)
+        {
+            
+            if(obj.Registration >= Registration) return -1;
+            if(obj.Registration <= Registration) return 1;
+            return 0;
         }
     }
 }

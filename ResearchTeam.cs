@@ -1,24 +1,25 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 namespace _1
 {
     public enum TimeFrame {Year, TwoYears, Long};    
-    public class ResearchTeam : Team, INameAndCopy
+    public class ResearchTeam : Team, INameAndCopy,IComparer<ResearchTeam>
     {
         private string _topic;
         private TimeFrame _duration;
-        private ArrayList _publications;
-        private ArrayList _participants;
+        private List<Paper> _publications;
+        private List<Person> _participants;
 
         public string Topic { get => _topic; set => _topic = value; }
         public TimeFrame Duration { get => _duration; set => _duration = value; }
-        public ArrayList Publications
+        public List<Paper> Publications
         {
             get { return _publications; }
             set { _publications = value; }
         }
 
-        public ArrayList Participants
+        public List<Person> Participants
         {
             get { return _participants; }
             set { _participants = value; }
@@ -28,11 +29,11 @@ namespace _1
         {
             Topic = "Team_Name";
             Duration = 0;
-            Participants = new ArrayList();
-            Publications = new ArrayList();
+            Participants = new List<Person>();
+            Publications = new List<Paper>();
         }
 
-        public ResearchTeam(string name, string topic, string org, int registration, TimeFrame duration, ArrayList publications, ArrayList participants) : base(name, org, registration)
+        public ResearchTeam(string name, string topic, string org, int registration, TimeFrame duration, List<Paper> publications, List<Person> participants) : base(name, org, registration)
         {
             _topic = topic;
             _duration = duration;
@@ -50,14 +51,14 @@ namespace _1
                     int LastPublicationIndex = 0; 
                     for(int i=1; i<Publications.Count;i++)
                     {
-                        if((Publications[LastPublicationIndex] as Paper).PublicDate < (Publications[i] as Paper).PublicDate) LastPublicationIndex = i;
+                        if(Publications[LastPublicationIndex].PublicDate < Publications[i].PublicDate) LastPublicationIndex = i;
                     }
-                    return Publications[LastPublicationIndex] as Paper;
+                    return Publications[LastPublicationIndex];
                 }
             }
         }
 
-        public ArrayList PartisipantsList
+        public List<Person> PartisipantsList
         {
             get
             {
@@ -183,9 +184,19 @@ namespace _1
             result.Duration = Duration;
             result.Org = String.Copy(Org);
             result.Registration = Registration;
-            result.Publications = new ArrayList(Publications);
-            result.Participants = new ArrayList(Participants);
+            result.Publications = new List<Paper>(Publications);
+            result.Participants = new List<Person>(Participants);
             return result;
+        }
+
+        public int Compare(ResearchTeam first, ResearchTeam second)
+        {
+            if (first.Topic.CompareTo(second.Topic) != 0)
+            {
+                return first.Topic.CompareTo(second.Topic);
+            }
+
+            return 0;
         }
     }
 }
