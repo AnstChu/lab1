@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 namespace _1
@@ -5,6 +6,11 @@ namespace _1
     public class ResearchTeamCollection
     {
         private List<ResearchTeam> _researchteams;
+        
+        public string CollectionName{get;set;}
+
+        public event TeamListHandler ResearchTeamAdded;
+        public event TeamListHandler ResearchTeamInserted;
 
         public List<ResearchTeam> ResearchTeams
         {
@@ -22,6 +28,8 @@ namespace _1
             ResearchTeams.Add(new ResearchTeam());
             ResearchTeams.Add(new ResearchTeam());
             ResearchTeams.Add(new ResearchTeam());
+            ResearchTeamAdded(this, new TeamListHandlerEventArgs(CollectionName, "Element was added by AddDefaults", ResearchTeams.Count - 1));
+            
         }
         
         public void AddResearchTeams(params ResearchTeam[] teams)
@@ -30,6 +38,7 @@ namespace _1
             {
                 ResearchTeams.Add(team);
             }
+            ResearchTeamAdded(this, new TeamListHandlerEventArgs(CollectionName, "Element was added by AddResearchTeams", ResearchTeams.Count - 1));
         }
 
         public override string ToString()
@@ -80,5 +89,28 @@ namespace _1
         {
             return ResearchTeams.Where(x => x.Participants.Count == value).ToList();
         }
+
+        public delegate void TeamListHandler(object source, TeamListHandlerEventArgs args);
+
+        public void insertAt(int j, ResearchTeam researchTeam)
+        {
+            if(ResearchTeams[j]!=null)
+            {
+                ResearchTeams.Insert(j,researchTeam);
+                ResearchTeamInserted(this, new TeamListHandlerEventArgs(CollectionName, "Element was added by InsertAt", j));
+            }
+            else 
+            {
+                ResearchTeams.Add(researchTeam);
+                ResearchTeamAdded(this, new TeamListHandlerEventArgs(CollectionName, "Element was added by InsertAt", ResearchTeams.Count - 1));
+            }
+        }
+
+        public ResearchTeam this[int index]
+        {
+            get { return ResearchTeams[index]; }
+            set { ResearchTeams[index] = value; }
+        }
     }
+
 }
